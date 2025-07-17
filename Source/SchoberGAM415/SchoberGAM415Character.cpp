@@ -38,12 +38,6 @@ ASchoberGAM415Character::ASchoberGAM415Character()
 
 }
 
-void ASchoberGAM415Character::BeginPlay()
-{
-	// Call the base class  
-	Super::BeginPlay();
-}
-
 //////////////////////////////////////////////////////////////////////////// Input
 
 void ASchoberGAM415Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
