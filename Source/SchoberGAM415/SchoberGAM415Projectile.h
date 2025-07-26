@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class UProjectileMovementComponent;
+class UNiagaraSystem;
 
 UCLASS(config=Game)
 class ASchoberGAM415Projectile : public AActor
@@ -38,9 +39,13 @@ class ASchoberGAM415Projectile : public AActor
 	UPROPERTY(EditAnywhere)
 		UMaterialInterface* projMat;
 
-	// Dynamic material instance used to apply runtime visual changes (e.g., color)
+	 // Dynamic material instance used to apply runtime visual changes (e.g., color)
 	UPROPERTY()
 		UMaterialInstanceDynamic* dmiMat;
+
+	// Niagara particle system used for visual effects on overlap
+	UPROPERTY(EditAnywhere)
+		UNiagaraSystem* colorP;
 
 public:
 	ASchoberGAM415Projectile();

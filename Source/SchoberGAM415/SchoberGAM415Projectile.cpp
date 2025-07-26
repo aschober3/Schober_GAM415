@@ -6,6 +6,8 @@
 #include "Components/SphereComponent.h"
 #include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 ASchoberGAM415Projectile::ASchoberGAM415Projectile() 
 {
@@ -37,7 +39,7 @@ ASchoberGAM415Projectile::ASchoberGAM415Projectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 1.0f;
 }
 
 void ASchoberGAM415Projectile::BeginPlay()
@@ -64,8 +66,24 @@ void ASchoberGAM415Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* Other
 		Destroy();
 	}
 
+	// If a Niagara particle system is assigned
 	if (OtherActor != nullptr)
 	{
+		if (colorP)
+		{
+			// Spawn the particle system attached to the hit component at the current location and rotation
+			UNiagaraComponent* particleComp = UNiagaraFunctionLibrary::SpawnSystemAttached(colorP, HitComp, NAME_None, FVector(0.f), FRotator(0.f), EAttachLocation::KeepRelativeOffset, true);
+			
+			// Set a color parameter in the Niagara system using the random color
+			particleComp->SetNiagaraVariableLinearColor(FString("RandomColor"), randColor);
+			
+			// Destroy the ball mesh to visually remove it
+			ballMesh->DestroyComponent();
+			
+			// Disable collision on the collision component
+			CollisionComp->BodyInstance.SetCollisionProfileName("NoCollision");
+		}
+
 		// Generate a random float between 0 and 3 to use as the decal frame number
 		float frameNum = UKismetMathLibrary::RandomFloatInRange(0.f, 3.f);
 
