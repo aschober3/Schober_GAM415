@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "PerlinProcTerrain.h"
 
 ASchoberGAM415Projectile::ASchoberGAM415Projectile() 
 {
@@ -94,5 +95,14 @@ void ASchoberGAM415Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* Other
 		// Set the decal color and frame number using material parameters
 		MatInstance->SetVectorParameterValue("Color", randColor);
 		MatInstance->SetScalarParameterValue("Frame", frameNum);
+
+		// Attempt to cast the other actor to a Perlin procedural terrain type
+		APerlinProcTerrain* procTerrain = Cast<APerlinProcTerrain>(OtherActor);
+
+		if (procTerrain)
+		{
+			// If cast is successful, alter the terrain mesh at the impact point
+			procTerrain->AlterMesh(Hit.ImpactPoint);
+		}
 	}
 }
